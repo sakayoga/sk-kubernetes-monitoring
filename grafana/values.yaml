@@ -1,0 +1,15 @@
+replicaCount: 1
+image:
+  repository: monitoringartist/grafana-xxl
+  tag: latest
+resources:
+  requests:
+    cpu: 100m
+    memory_mebibyte: 256
+  limits:
+    cpu: 1000m
+    memory_mebibyte: 2048
+service:
+  type: ClusterIP
+  internalPort: 3000
+  externalPort: 3000

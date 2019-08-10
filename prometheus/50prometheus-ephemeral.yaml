@@ -1,0 +1,47 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: prometheus-core
+  namespace: monitoring
+  labels:
+    app: prometheus
+    component: core
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: prometheus-main
+      labels:
+        app: prometheus
+        component: core
+    spec:
+      serviceAccountName: prometheus-k8s
+      containers:
+      - name: prometheus
+        image: prom/prometheus:v2.4.3
+        args:
+          - '--storage.tsdb.retention=72h'
+          - '--storage.tsdb.path=/prometheus/data'
+          - '--config.file=/prometheus/config/prometheus.yaml'
+          - '--web.enable-lifecycle'
+          - '--web.enable-admin-api'
+          - '--web.listen-address=:10060'
+          - '--web.console.templates="consoles"'
+          - '--web.console.libraries="console_libraries"'
+        ports:
+        - name: webui
+          containerPort: 10060
+        resources:
+          requests:
+            cpu: 10m
+            memory: 150Mi
+          # limits:
+          #   cpu: 1000m
+          #   memory: 1000Mi
+        volumeMounts:
+        - name: config-volume
+          mountPath: /prometheus/config
+      volumes:
+      - name: config-volume
+        configMap:
+          name: prometheus-config
