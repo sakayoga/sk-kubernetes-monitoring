@@ -4,6 +4,8 @@ akan selalu di update dan di release berdasarkan versi kubernetes yang di suppor
 
 Pada repo ini sudah ada default dashboard yang dapat di import ke dalam grafana.
 
+default storage class menggunakan rook, harap ganti jika menggunakan storage lain.
+
 
 # RELEASE INFO
 kubernetes support tidak backward dan forward compatible, 
