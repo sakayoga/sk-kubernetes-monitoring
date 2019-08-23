@@ -16,6 +16,8 @@ spec:
         component: core
     spec:
       serviceAccountName: prometheus-k8s
+      securityContext:
+        fsGroup: 65534
       containers:
       - name: prometheus
         image: prom/prometheus:v2.4.3
@@ -41,7 +43,12 @@ spec:
         volumeMounts:
         - name: config-volume
           mountPath: /prometheus/config
+        - name: prometheus-data
+          mountPath: /prometheus/data 
       volumes:
       - name: config-volume
         configMap:
           name: prometheus-config
+      - name: prometheus-data
+        persistentVolumeClaim:
+          claimName: prometheus-vol
